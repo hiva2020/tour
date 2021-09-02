@@ -21,9 +21,9 @@ mongoose
     console.log('DB Connection Successful');
   });
 mongoose.set('debug', (collection, method, query) => {
-  // console.log('===============begin query=======================');
+  // console.log('===============begin query========================');
   // console.log(collection, method, query);
-  // console.log('===============end query=========================');
+  // console.log('===============end query==========================');
 });
 // const testTour = new Tour({
 //   name: 'The Park Camper',
