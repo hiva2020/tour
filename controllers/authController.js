@@ -12,7 +12,7 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-const createSendToken = (user, satusCode, res) => {
+const createSendToken = (user, satusCode, req, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
     expires: new Date(
@@ -21,7 +21,8 @@ const createSendToken = (user, satusCode, res) => {
     httpOnly: true,
     maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 1000, //
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  if (req.secure || req.headers['x-forwarded-proto'] === 'https')
+    cookieOptions.secure = true;
 
   //remove the password from output
   user.password = undefined;
@@ -41,7 +42,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   // console.log(url);
 
   await new Email(newUser, url).sendWelcome();
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -58,7 +59,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // console.log(user);
   // 3) If everything ok , send token to client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
@@ -170,7 +171,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const resetURL = `${req.protocol}://${req.get(
       'host'
     )}/api/v1/users/resetPassword/${resetToken}`;
-    // const message = `Forgot your password ? Submit a Patch request with your password and 
+    // const message = `Forgot your password ? Submit a Patch request with your password and
     // passwwordConfirm to: ${resetURL} \n if you didn't forget your password ignore this email !`;
     // await sendEmail({
     //   from: 'Taha me',
@@ -222,7 +223,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   // 3) Update changePasswordAt property for t he user
   // 4) Log the user in , send JWT!
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -240,5 +241,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
   // User findByidAndUpdate will  Not work as intended
   //4) Log user in send Jwt
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });

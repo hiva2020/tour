@@ -20,6 +20,9 @@ const viewRouter = require('./routes/viewRoutes');
 
 // Express
 const app = express();
+
+app.enable('trust proxy');
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -95,3 +98,10 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
+
+process.on('SIGTERM', () => {
+  console.log(' SIGTERM RECEIVED. Shutting down gracefully');
+  Server.close(() => {
+    console.log('Process terminated');
+  });
+});

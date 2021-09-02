@@ -9,7 +9,7 @@ process.on('uncaughtException', (err) => {
 
 dotenv.config({ path: './config.env' });
 let DB = '';
-if (process.env.NODE_ENV === 'development') DB = process.env.DATABASE;
+if (process.env.NODE_ENV === 'production') DB = process.env.DATABASE;
 //replace('',new)
 else DB = process.env.DATABASE_LOCAL;
 
