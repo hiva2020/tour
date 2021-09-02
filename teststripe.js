@@ -1,3 +1,4 @@
+// This is test for stripe
 const stripe = require('stripe')('sk_test_51JUxBWJ14q5yQER3oCXkgvqpPzavujStTyUalgkdTS2fnLpKluJiSAMXe1B6LJxZj4J4rNLaD9fqeHtlA3LPm0yO00QYJQJBz9');
 const express = require('express');
 const app = express();
