@@ -15,7 +15,7 @@ export const bookTour = async tourId => {
             sessionId: session.data.session.id
         });
         //2)) create checkout session from API
-        console.log(session);
+        // console.log(session);
     } catch (err) {
         showAlert('error', err);
     }

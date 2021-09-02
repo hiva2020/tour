@@ -227,7 +227,7 @@ exports.getToursDistances = catchAsync(async (req, res, next) => {
         400
       )
     );
-  console.log(lat, lng, unit, 'ok');
+  // console.log(lat, lng, unit, 'ok');
   const tours = await Tour.aggregate([
     {
       $geoNear: {
@@ -271,7 +271,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
 
-  console.log(distance, lat, lng, unit);
+  // console.log(distance, lat, lng, unit);
   res.status(200).json({
     status: 'success',
     results: tours.length,

@@ -38,7 +38,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+  // console.log(url);
 
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
@@ -56,7 +56,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  console.log(user);
+  // console.log(user);
   // 3) If everything ok , send token to client
   createSendToken(user, 200, res);
 });
@@ -115,7 +115,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //only for render pages
 exports.isLoggedIn = async (req, res, next) => {
-  console.log('login', req.cookies.jwt);
+  // console.log('login', req.cookies.jwt);
   if (req.cookies.jwt) {
     try {
       // 2) Verify token
@@ -163,7 +163,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   //2 genertae random reset token
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
-  console.log(resetToken);
+  // console.log(resetToken);
 
   try {
     // 3) send it to user email

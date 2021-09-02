@@ -178,7 +178,7 @@ tourSchema.post(/^find/, function (doc, next) {
 });
 
 tourSchema.pre('aggregate', (next) => {
-  console.log('okkkkkkkkkkkkkk');
+  // console.log('okkkkkkkkkkkkkk');
   // this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
 
   next();

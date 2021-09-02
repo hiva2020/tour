@@ -8,7 +8,7 @@ const handleCastErrorDB = (err) => {
 const handleDuplicateFieldsDB = (err) => {
   // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
   const value = err.code;
-  console.log(value);
+  // console.log(value);
 
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
@@ -58,10 +58,10 @@ const sendErrorProd = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     // 1) Log error
     console.error('ERROR 💥', err);
-    console.log(err.isOperational);
+    // console.log(err.isOperational);
     // Operational, trusted error: send messag;e to client
     if (err.isOperational) {
-      console.log(err.message);
+      // console.log(err.message);
       return res.status(err.statusCode).json({
         status: err.status,
         message: err.msg,
