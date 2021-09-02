@@ -8,7 +8,12 @@ process.on('uncaughtException', (err) => {
 });
 
 dotenv.config({ path: './config.env' });
-const DB = process.env.DATABASE_LOCAL; //replace('',new)
+let DB = '';
+if (process.env.NODE_ENV === 'development') DB = process.env.DATABASE;
+//replace('',new)
+else DB = process.env.DATABASE_LOCAL;
+
+console.log(process.env.NODE_ENV);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,

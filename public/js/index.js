@@ -84,3 +84,7 @@ bookBtn.addEventListener('click', e=>{
   bookTour(tourId);
   e.target.textContent = 'Book Now!';
 })
+
+if(!bookBtn){
+  
+}
