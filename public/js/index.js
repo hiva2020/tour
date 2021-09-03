@@ -86,7 +86,7 @@ bookBtn.addEventListener('click', e=>{
   e.target.textContent = 'Book Now!';
 })
 
-const alertMessage = document.querySelector('.body').dataset.alert;
+const alertMessage = document.querySelector('body').dataset.alert;
 
 if(alert){
   showAlert('success', alertMessage,20);
