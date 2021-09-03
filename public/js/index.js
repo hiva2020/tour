@@ -11,7 +11,7 @@ import {
   updateSettings
 } from './updateSettings';
 import { bookTour } from './stripe';
-import { showAlert } from './alerts';
+import { showAlert } from './alert';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
