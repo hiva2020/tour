@@ -11,6 +11,7 @@ import {
   updateSettings
 } from './updateSettings';
 import { bookTour } from './stripe';
+import { showAlert } from './alerts';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -85,6 +86,8 @@ bookBtn.addEventListener('click', e=>{
   e.target.textContent = 'Book Now!';
 })
 
-if(!bookBtn){
-  
+const alertMessage = document.querySelector('.body').dataset.alert;
+
+if(alert){
+  showAlert('success', alertMessage,20);
 }
