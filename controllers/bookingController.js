@@ -40,6 +40,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       {
         name: `${tour.name} Tour`,
         description: `${tour.summary}`,
+        images: [
+          `https://our-tours.herokuapp.com/img/tours/${tour.imageCover}`,
+        ],
         amount: tour.price * 100,
         currency: 'usd',
         quantity: 1,
@@ -48,9 +51,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     mode: 'payment',
   });
 
-  
   //   stripe_account: 'acct_1I429QACVO0I2rXH',
-  //  images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+
   //3) create session as response
   res.status(200).json({
     status: 'success',

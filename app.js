@@ -38,6 +38,9 @@ app.use(cors());
 //   })
 // );
 
+// app.options('/api/v1/tours/:id', cors());
+app.options('*', cors());
+
 // serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 // Set security http limit request from same api
