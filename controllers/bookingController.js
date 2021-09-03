@@ -54,54 +54,57 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 //   res.redirect(req.originalUrl.split('?')[0]);
 // });
 
-exports.createBookingCheckout =async session =>  {
+exports.createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
-  const user =(await User.findOne({email: session.customer_email})).id;
-  const price =session.line_items[0].amount/100;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.line_items[0].amount / 100;
 
-   await Booking.create({ tour, user, price });
+  await Booking.create({ tour, user, price });
   //res.redirect(req.originalUrl.split('?')[0]);
 };
 
 exports.webhookCheckout = (req, res, next) => {
-  const signature = req.headers['stripe-signature']; 
+  const signature = req.headers['stripe-signature'];
   let event;
   try {
     try {
-      event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
     } catch (err) {
-     return res.status(400).send(`Webhook Error: ${err.message}`);
-    
+      return res.status(400).send(`Webhook Error: ${err.message}`);
     }
+    let checkout;
     // Handle the event
-  switch (event.type) {
-    case 'checkout.session.async_payment_failed':
-      const checkout = event.data.object;
-      // Then define and call a function to handle the event checkout.session.async_payment_failed
-      break;
-    case 'checkout.session.async_payment_succeeded':
-      const checkout = event.data.object;
+    switch (event.type) {
+      case 'checkout.session.async_payment_failed':
+        checkout = event.data.object;
+        // Then define and call a function to handle the event checkout.session.async_payment_failed
+        break;
+      case 'checkout.session.async_payment_succeeded':
+        checkout = event.data.object;
 
-      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-      break;
-    case 'checkout.session.completed':
-      const checkout = event.data.object;
-      this.createBookingCheckout(event.data.object);
-      // Then define and call a function to handle the event checkout.session.completed
-      res.status(200).json({received: true});
-      break;
-    case 'payment_intent.amount_capturable_updated':
-      const paymentIntent = event.data.object;
-      // Then define and call a function to handle the event payment_intent.amount_capturable_updated
-      break;
-    // ... handle other event types
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
+        // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+        break;
+      case 'checkout.session.completed':
+        checkout = event.data.object;
+        this.createBookingCheckout(event.data.object);
+        // Then define and call a function to handle the event checkout.session.completed
+        res.status(200).json({ received: true });
+        break;
+      case 'payment_intent.amount_capturable_updated':
+        const paymentIntent = event.data.object;
+        // Then define and call a function to handle the event payment_intent.amount_capturable_updated
+        break;
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
- 
 };
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);
